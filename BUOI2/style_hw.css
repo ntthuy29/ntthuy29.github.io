@@ -1,0 +1,249 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+KR:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    margin-inline: 24px;
+    width: 100%;
+    max-width: 1280px;
+    /* padding-top: 20px;
+    padding-left : 230px;
+    padding-right:0px; */
+    height: 100%;
+    margin-left: 150px;
+    margin-top: 20px;
+    
+   
+}
+
+
+.name_social{
+    margin-top: 10px;
+}
+#social{
+    display: inline-block;
+    width: 600px;
+    padding-right:0;
+    text-align: right;
+    font-weight: normal;
+   
+    
+}
+.name_social{
+    width: 100%;
+
+}
+.jason_stroff{
+    display: inline-block;
+    padding-left: 0px;
+    font-family: "Montserrat", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+}
+#J-name{
+    display: inline-block;
+    width: 35px;
+    height: 30px;
+    background-color: black;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 6px;
+    padding-left:15px;
+    border-radius: 5px;
+    font-size: 25px;
+    font-family: "Noto Sans KR", sans-serif;
+  
+
+}
+
+#image >img {
+    margin-top: 30px;
+    width: 300px;
+    height: 350px;
+    display: inline-block;
+  
+}
+.table_infor{
+    margin-top:0px;
+    padding-top:0px;
+}
+#th_infor{
+    text-align: top;
+    padding-top:10px;
+}
+.hi_there{
+   
+    font-size: 10px;
+    margin-left: 60px;
+    font-weight: normal;
+    margin-bottom: 5px;
+    text-align: left;
+    
+}
+p.intro{
+    margin-top: 20px;
+    width: 250px;
+    height: 150px;
+    margin-left: 60px;
+    text-align: left;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: "Roboto", sans-serif;
+
+}
+
+#image{
+    padding-left: 0px;
+}
+.ex_pr_hp{
+    text-align: left;
+    width: 100px;
+    
+}
+.table_third{
+    margin-left: 60px;
+    margin-top: 10px;
+}
+.ex_pr_hp.table_third_number{
+    font-size : 30px;
+    font-weight: bold;
+    color: #f26464;
+    font-family:"Montserrat", sans-serif;
+
+}
+.ex_pr_hp.table_third_text{
+    font-weight: normal;
+    color:#444
+    
+}
+#about_me{
+    font-weight: bold;
+    margin-top: 20px;
+    
+}
+hr{
+    width: 85px;
+    margin-top: 8px;
+    border-color: #f26464;
+
+}
+.skill>hr{
+    width: 120px;
+}
+#other_skill{
+    text-align: left;
+}
+#story{
+    margin-top: 10px;
+    width: 670px;
+    color: #444;
+    font-size: 15px;
+}
+.download_resume{
+    border-color: #f26464;
+    color: #f26464;
+    width: 190px;
+    height: 40px;
+    border-radius: 25px;
+    background-color: white;
+}
+div.button_dowload{
+    text-align: center;
+    width: 800px;
+    margin-top: 50px;
+    
+   
+}
+.table_fourth{
+    margin-top: 30px;
+}
+.skill{
+    width: 50%;
+    text-align: left;
+    /* display: inline-block; */
+    height: 50px;
+    margin-bottom: 0px;
+    
+}
+.language{
+    margin-top: 0px;
+    padding-top: 0px;
+
+}
+.button_core_skill{
+    display: inline-block;
+    margin-top: 0px;
+}
+.span_language{
+    margin-top: 100px;
+    text-align: left;
+   
+}
+.span_language > button{
+
+    height: 35px;
+    padding: 10px 10px;
+    margin-inline: 5px;
+    border-radius: 15px;
+    border: 2px solid #e7e7e7;
+    background-color: white;
+    color: #444;
+
+}
+#span_lag1{
+    padding-left: 0px;
+  
+}
+#span_lag2{
+    text-align: left;
+}
+#button1,#button11{
+    margin-left: 0px;
+}
+#work_experience{
+    font-weight: bold;
+    margin-top: 100px;
+}
+.line_work_experience{
+    width: 160px;
+}
+.table_five{
+    margin-top: 30px;
+}
+.year{
+    text-align: left;
+}
+.table_five>.tr_2{
+    margin-top: 20px;
+
+}
+.tr_2{
+    font-size: 30px;
+    font-family: "Roboto", sans-serif;
+    color: #444;
+    margin-top: 10px;
+
+}
+.role{
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.tr_3{
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.tr_4{
+    padding-top:30px;
+    color: #444;
+    width: 500px;
+}
+.stack-overflow, .linkedin{
+    margin-inline: 10px;
+}
