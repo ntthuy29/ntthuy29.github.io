@@ -7,20 +7,12 @@
     margin: 0px;
     padding: 0px;
 }
-body{
-    margin-inline: 24px;
+.container{
+    margin-inline: auto;
     width: 100%;
     max-width: 1280px;
-    /* padding-top: 20px;
-    padding-left : 230px;
-    padding-right:0px; */
-    height: 100%;
-    margin-left: 150px;
     margin-top: 20px;
-    
-   
 }
-
 
 .name_social{
     margin-top: 10px;
@@ -151,13 +143,15 @@ hr{
     height: 40px;
     border-radius: 25px;
     background-color: white;
+    align-items: center;
+    justify-content: center;
 }
 div.button_dowload{
-    text-align: center;
     width: 800px;
-    margin-top: 50px;
-    
-   
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 .table_fourth{
     margin-top: 30px;
