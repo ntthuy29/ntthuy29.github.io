@@ -1,0 +1,79 @@
+*{
+    margin: 0px;
+}
+body{
+    height: 100vh;
+}
+.container,.item3,.item33, .item33-3
+{
+display: grid;
+
+grid-template-columns: auto auto ;
+height: 100%;
+width: 100%;
+}
+.item1{
+    background-color: rgb(79, 60, 243);
+    
+}
+.item2,.item32, .item33-2,.item33-32{
+    background-color: rgb(163, 139, 18);
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 2;
+}
+.item3{
+    background-color: rgb(242, 240, 247);
+   
+    
+}
+.item32{
+    background-color: red;
+}
+.item31{
+    background-color: rgb(49, 177, 240);
+}
+.item33-2{
+    background-color: rgb(49, 90, 8);
+}
+.item33-1{
+    background-color: rgb(151, 151, 41);
+}
+
+.item33-31{
+    background-color: black;
+}
+.item33-32{
+    background-color: blue;
+}
+ .item33-33
+{
+display: grid;
+
+grid-template-columns: auto auto ;
+height: 100%;
+width: 100%;
+}
+.item33-33-1{
+    background-color: yellow;
+}
+.item33-33-2{
+    background-color: red;
+}
+.textt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.text1, .text2, .text3{
+    color: rgb(224, 215, 215);
+
+}
+.text1{
+    font-size: 30px;
+    font-weight: 800px;
+}
+.item33-31 >.text1{
+    font-size: 20px;
+}
