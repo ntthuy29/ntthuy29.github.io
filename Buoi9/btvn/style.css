@@ -13,11 +13,11 @@ height: 100%;
 width: 100%;
 }
 .item1{
-    background-color: rgb(79, 60, 243);
+    background-color: rgb(101,0,244);
     
 }
 .item2,.item32, .item33-2,.item33-32{
-    background-color: rgb(163, 139, 18);
+    background-color: rgb(253,211,80);
     grid-row-start: 1;
     grid-row-end: 3;
     grid-column-start: 2;
@@ -28,23 +28,23 @@ width: 100%;
     
 }
 .item32{
-    background-color: red;
+    background-color: rgb(238,3,20);
 }
 .item31{
-    background-color: rgb(49, 177, 240);
+    background-color: rgb(0,227,234);
 }
 .item33-2{
-    background-color: rgb(49, 90, 8);
+    background-color: rgb(0,184,82)
 }
 .item33-1{
-    background-color: rgb(151, 151, 41);
+    background-color: rgb(253,213,77);
 }
 
 .item33-31{
-    background-color: black;
+    background-color: rgb(49,45,41);
 }
 .item33-32{
-    background-color: blue;
+    background-color: rgb(101,0,245);
 }
  .item33-33
 {
@@ -55,10 +55,10 @@ height: 100%;
 width: 100%;
 }
 .item33-33-1{
-    background-color: yellow;
+    background-color: rgb(253,211,80);
 }
 .item33-33-2{
-    background-color: red;
+    background-color: rgb(238,3,20);
 }
 .textt{
     display: flex;
@@ -76,4 +76,47 @@ width: 100%;
 }
 .item33-31 >.text1{
     font-size: 20px;
+}
+@media screen and (max-width: 1060px) {
+    .item33-31{
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row-start: 1;
+       
+    }
+    .item33-32{
+        grid-row-start: 2;
+        grid-column-end: 4;
+        grid-column-start: 3;
+      
+    }
+    .item33-33{
+        grid-column-end: 3;
+        grid-column-start: 1;
+       
+    }
+   
+
+
+}
+@media screen and (max-width: 550px){
+    .item3{
+        grid-template-columns: auto auto auto auto;
+
+    }
+    .item32{
+        grid-column-start: 3;
+        grid-column-end: 5;
+        grid-row-end: 2;
+
+    }
+    .item33{
+        grid-row-start: 2;
+        grid-column-end: 5;
+        grid-column-start: 1;
+    }
+    .text2{
+        display: none;
+    }
+
 }
