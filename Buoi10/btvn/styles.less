@@ -1,14 +1,84 @@
-.container-pokemon{
+#app{
     display: grid;
-    grid-template-columns: auto auto auto auto ;
-    column-gap: 10px;
-    row-gap: 10px;
-    .product{
-        border: 2px solid black;
+    grid-template-columns: auto auto auto auto auto auto  ;
+    column-gap: 3px;
+    row-gap: 3px;
+    width: 80%;
+    // transform: translateX(200px);
+    .card{
+        border: 2px solid rgb(221, 214, 214);
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: antiquewhite;
+        background-color:white;
+        width: 150px;
+        height: 200px;
+        border-radius: 20px;
+        z-index: inherit;
+        
+        box-shadow: #0000001a 0 4px 12px;
+        
+
     }
+    .card:hover{
+        box-shadow: 3px 2px 2px 2px rgb(214, 210, 210);
+        transform: translateZ(10px);
+        // background-color: blueviolet;
+       
+    
+    }
+}
+button{
+    // transform: translateX(500px);
+    width: 80px;
+   
+}
+p,input{
+    // transform: translateX(500px)
+}
+p{
+    font-weight: 400px;
+    font-size: 50px;
+}
+input{
+    width: 350px;
+    height: 40px;
+    border-radius: 25px;
+}
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.type{
+    font-size: 15px;
+    border: 2px;
+    background-color: rgb(16, 210, 68);
+    border-radius: 5px;
+}
+.type2{
+    font-size: 15px;
+    border: 2px;
+    background-color: purple;
+    padding-left: 10px;
+    border-radius: 5px;
+    
+
+}
+.type,.type2{
+    display: block;
+   
+    height: 25px;
+    text-align: center;
+}
+.name{
+    font-size: 20px;
+}
+.divType{
+    display: flex;
+    gap: 5px;
 }

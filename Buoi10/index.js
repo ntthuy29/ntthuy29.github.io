@@ -83,3 +83,63 @@ setTimeout(function(){
 //js event loop => bài tập về nhà về coi thử
 // clearTimeout
 // clearInterval 
+console.log(123)
+setTimeout(function(){
+    console.log(3898)
+},0)
+console.log(9)
+const promise = new Promise(
+    function(resolve,reject){
+        setTimeout(function(){
+            console.log(123)
+        },0)
+
+})
+console.log(123)
+promise()
+console.log(789)
+//hàm resolve và reject nhận vào 1 tham số bất kỳ 
+promise.then(function(value){
+
+})
+// trong thằng then nhận giá trị mà resolve, catch nhận reject trả lời
+//đảm bảo hoàn thành trong promise trước rồi mới thực hiện .then,..., reject thig
+// .finally luôn luôn chạy, hàm k có tham số 
+// Promise.all([promise,promise2]), thứ tự nhận về tương ứng với thứ tự tham số 
+const fetchData = new Promise(function(resolve, reject){
+    const http = new XMLHttpRequest()
+    http.open(
+        'GET',
+        'https://pokeapi.co/api/v2/pokemon/?offset=0&limit=898'
+
+    )
+    http.send()
+    http.onload = function(){
+        resolve(http.reponse)
+    }
+    http.oneror = function(){
+
+    }
+})
+fetchData.then(function (value){
+    const object = JSON.parse(value)
+    console.log(object)
+})
+fetch('https://pokeapi.co/api/v2/pokemon/?offset=0&limit=898')
+.then(
+    function(response){
+        const promise = response.json()
+        return promise
+    }
+)
+.then(
+    function(value){
+        console.log(value)
+        app.innerHTML = ""
+        render(value.results)
+    }
+)
+let offset = 0;
+let limmit = 5;
+// tim hieu 
+const app = document
