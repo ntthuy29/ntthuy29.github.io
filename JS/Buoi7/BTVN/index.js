@@ -5,7 +5,7 @@ const getSubmit = document.querySelector("#submit")
 console.log(getSubmit)
 const getKhungMau = document.querySelector("#khung_mau")
 console.log(getKhungMau);
-console.log("hihiahuhuhuhuuuuuuuuuuu")
+
 getMaMau.addEventListener(
     "input",
     function(){

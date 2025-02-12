@@ -53,6 +53,14 @@ s7_card1.addEventListener(
        } else {
         s7_item1.style.display ='none'
        }
+       if(s7_item2.style.display==='block'){
+        s7_item2.style.display='none'
+       }
+       if(s7_item3.style.display==='block'){
+        s7_item2.style.display='none'
+       }
+
+
     }
 )
 
@@ -64,6 +72,12 @@ s7_card2.addEventListener(
        } else {
         s7_item2.style.display ='none'
        }
+       if(s7_item1.style.display==='block'){
+        s7_item2.style.display='none'
+       }
+       if(s7_item3.style.display==='block'){
+        s7_item2.style.display='none'
+       }
     }
 )
 
@@ -74,6 +88,12 @@ s7_card3.addEventListener(
         s7_item3.style.display='block'
        } else {
         s7_item3.style.display ='none'
+       }
+       if(s7_item2.style.display==='block'){
+        s7_item2.style.display='none'
+       }
+       if(s7_item1.style.display==='block'){
+        s7_item2.style.display='none'
        }
     }
 )
