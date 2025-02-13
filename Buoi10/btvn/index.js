@@ -98,7 +98,7 @@ button.addEventListener('click', render)
 
 
 input.addEventListener('input', function() {
-    offset = 0
+    offset = 0;
     app.innerHTML = ''
     filteredPokemon = pokemons.filter(
         function(pokemon) {

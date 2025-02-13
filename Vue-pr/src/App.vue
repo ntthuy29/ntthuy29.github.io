@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 
+
 const offset = ref(0);
 const limit = ref(50);
 const allPokemon = ref([]);
@@ -28,7 +29,6 @@ const getAllPokemon = async () => {
   if (response?.results) {
     const pokemonList = response.results;
     const detailedPokemon = await Promise.all(pokemonList.map(pokemon => fetchPromise(pokemon.url)));
-
     allPokemon.value = [...allPokemon.value, ...detailedPokemon];
   }
 };
@@ -43,9 +43,32 @@ const loadMore = () => {
 };
 
 onMounted(getAllPokemon);
+// import{ ref, computed } from 'vue';
+//import {fetchAPI, getIDPokemon}
+// let filteredPokemon = ref([]);
+// let pokemon = [];
+// let NUMBER_OF_RENDER =6;
+// let offset = ref(0);
+// const renderPokemons = computed() => filteredPokemon.value.slice(0, offset+NUMBER_OF_RENDER);
+// async function getPokemon(){
+//   const data = await fetchAPI('https://pokeapi.co/api/v2/pokemon?offset=0%limit=890');
+//   pokemon = data.results;
+//   filteredPokemon.value=pokemon;
+// }
+// getPokemon()
+// function handleLoadMore(){
+//   offset+=NUMBER_OF_RENDER;
+// }
+// function handleSearch(event){
+//   filteredPokemon.value =renderPokemons.filter(pokemon) => {
+//     return pokemon.name.includes(event.target.value);
+//   }
+//   offset.value=0;
+// }
 </script>
 
 <template>
+  
    <div class="search">
     <input v-model="keyword" placeholder="Tìm kiếm Pokémon" />
 
@@ -65,8 +88,11 @@ onMounted(getAllPokemon);
         </div>
       </div>
     </div>
-    <div class="container-button"><button @click="loadMore">LoadMore</button></div>
+    <div class="container-button">
+      <button v-if="offset>filteredPokemon" @click="loadMore">
+      LoadMore</button></div>
   </div>
+ 
 </template>
 <style >
 .card{
