@@ -600,6 +600,14 @@
                     @media screen and (max-width: 790px){
                         flex-direction: column;
                     }
+                    @keyframes animationimg {
+                        from{
+                            transform: translateX(-500px);
+                        }
+                        to{
+                            transform: translateX(10px);
+                        }
+                    }
                     .col-1{
                         .container-img{
                            
@@ -608,11 +616,13 @@
                                  box-shadow: 10px 12px 40px rgba(0, 0, 0, 0.2);
                                  vertical-align: middle;
                                  border-style: none;
+                                 animation: animationimg 1s ease-in;
                                  
-                                
-
-
                             }
+                            img:active{
+                                animation: animationimg 1s ease-in;
+                            }
+                            
                         }
                     }
                     .col-2{
