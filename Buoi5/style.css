@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+}
+.container{
+    height: 100vh;
+   
+    
+}
+.container-navbar{
+    width: 100px;
+    height: 100%;
+    background-color: aqua;
+}
+.header{
+    width: 100%;
+    margin-left: 100px;
+    height: 50px;
+    background-color: antiquewhite;
+    position: fixed;
+    top:0;
+
+}
+.child_2-2{
+    margin-top: 50px;
+    display: fixed;
+}
