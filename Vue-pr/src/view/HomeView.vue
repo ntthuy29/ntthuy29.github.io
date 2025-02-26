@@ -1,10 +1,10 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import CardPokemon from './components/CardPokemon.vue'
-import ButtonPokemon from './components/ButtonPokemon.vue'
-import search from './components/search.vue'
-import pokemonDetail  from './components/pokemonDetail.vue';
+import CardPokemon from '../components/CardPokemon.vue'
+import ButtonPokemon from '../components/ButtonPokemon.vue'
+import search from '../components/search.vue'
+// import pokemonDetail  from './components/pokemonDetail.vue';
 const pokemon = ref([]);
 const offset = ref(0);
 const limit = 20;
@@ -60,9 +60,8 @@ const selectedPoke = ref(false);
 function responsePoke(key) {
   pokemonSelected.value = key;
 }
-function back(){
-    selectedPoke.value =false;
-}
+
+
 function clickCard(key) {
   selectedPoke.value = key;
 }
@@ -70,7 +69,7 @@ onMounted(getDataPokemon);
 </script>
 
 <template>
-    <button class="back" v-if="selectedPoke" @click="back()">back</button>
+    <!-- <button class="back" v-if="selectedPoke" @click="back()">back</button> -->
     <div class="container" v-if="!selectedPoke" >
         <div class="header">
             <h2>Pokemon API</h2>
@@ -88,11 +87,6 @@ onMounted(getDataPokemon);
         @increase="increaseOffset"/>
 
     </div>
-
-        <pokemonDetail v-if="selectedPoke"
-        :pokemonSelected="pokemonSelected"
-        :getPokemonImage="getPokemonImage"
-        /> 
         
 </template>
 

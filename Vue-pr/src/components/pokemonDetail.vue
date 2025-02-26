@@ -1,232 +1,203 @@
 <script setup>
-import {ref, onMounted,computed} from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 const typeColors = { 
-    normal: '#A8A77A', fire: '#EE8130', water: '#6390F0', electric: '#F7D02C', 
-    grass: '#7AC74C', ice: '#96D9D6', fighting: '#C22E28', poison: '#A33EA1', 
-    ground: '#E2BF65', flying: '#A98FF3', psychic: '#F95587', bug: '#A6B91A', 
-    rock: '#B6A136', ghost: '#735797', dragon: '#6F35FC', dark: '#705746', 
-    steel: '#B7B7CE', fairy: '#D685AD' 
+  normal: '#A8A77A', fire: '#EE8130', water: '#6390F0', electric: '#F7D02C', 
+  grass: '#7AC74C', ice: '#96D9D6', fighting: '#C22E28', poison: '#A33EA1', 
+  ground: '#E2BF65', flying: '#A98FF3', psychic: '#F95587', bug: '#A6B91A', 
+  rock: '#B6A136', ghost: '#735797', dragon: '#6F35FC', dark: '#705746', 
+  steel: '#B7B7CE', fairy: '#D685AD' 
 };
-    const props = defineProps({
-        pokemonSelected:{
-            type: Object,
-            required: true
-        },
-        getPokemonImage:{
-            type: Function,
-            required: true
-        }
-    })
-    const listType = ref([]);
-    let renderSelected =ref({});
-async function getAPI(){
-    const response = await fetch(props.pokemonSelected.url);
+
+const pokemon = ref([]);
+const pokemonSelected = ref(null);
+const renderSelected = ref(null);
+const listType = ref([]);
+const listDescription = ref([]);
+const listNumber = ref([]);
+const evolutionNumber = ref('');
+const route = useRoute();
+
+async function getDataPokemon() {
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=896`);
     const data = await response.json();
-    renderSelected.value=data;
-    listType.value = data.types;
-}
-const id = computed(() => {
-  if (props.pokemonSelected.url) {
-    return props.pokemonSelected.url.split("/").filter(Boolean).pop();
+    pokemon.value = data.results; 
+    pokemonSelected.value = pokemon.value.find(poke => poke.name === route.params.id);
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách Pokémon:", error);
   }
-  return null;
-});
-let evolutionNumber = ref({});
-let number = ref();
-let listEvolution = ref({});
-let listEvolutionTo = ref([]);
-let listNumber = ref([]);
+}
 
-// Hàm lấy ID evolution chain từ species
+const id = ref('');
+async function setPokemonId() {
+  if (pokemonSelected.value) {
+    const response = await fetch(pokemonSelected.value.url);
+    const data = await response.json();
+    id.value = data.id;
+    await getAPI();
+    await fetchEvolutionNumber();
+    await fetchEvolutionChain();
+    await getDescription();
+  }
+}
+function getID(url){
+  return  url.split("/").slice(-2, -1)[0];
+}
+function getPokemonImage(a) {
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${a}.png`;
+}
+
+async function getAPI() {
+  if (!id.value) return;
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id.value}`);
+    const data = await response.json();
+    renderSelected.value = data;
+    listType.value = data.types;
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin Pokémon:", error);
+  }
+}
+
 async function fetchEvolutionNumber() {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id.value}/`);
-  const data = await response.json();
-
-  evolutionNumber.value = data.evolution_chain.url;
-  number.value = evolutionNumber.value.split("/").filter(Boolean).pop();
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id.value}/`);
+    const data = await response.json();
+    evolutionNumber.value = data.evolution_chain.url;
+  } catch (error) {
+    console.error("Lỗi khi lấy Evolution Number:", error);
+  }
 }
-
-// Hàm lấy toàn bộ danh sách tiến hóa
-// Sửa API lấy chuỗi tiến hóa
+const listChain = ref('');
 async function fetchEvolutionChain() {
-  const evolutionChainId = evolutionNumber.value.split("/").filter(Boolean).pop();
-  const response = await fetch(`https://pokeapi.co/api/v2/evolution-chain/${evolutionChainId}/`);
-  const data = await response.json();
+  console.log("chayj voo day roi nhe huhu")
+  if (!evolutionNumber.value) return;
+  try {
+    const evolutionChainId = evolutionNumber.value.split("/").filter(Boolean).pop();
+    const response = await fetch(`https://pokeapi.co/api/v2/evolution-chain/${evolutionChainId}/`);
+    const data = await response.json();
 
-  let currentEvolution = data.chain;
-  while (currentEvolution) {
-  const speciesUrl = currentEvolution.species.url;
-  const pokemonId = speciesUrl.split("/").filter(Boolean).pop();
-  const pokemonName = currentEvolution.species.name; // Lấy tên Pokémon
+    let currentEvolution = data.chain;
+    listNumber.value = [];
 
-  listNumber.value.push({
-    id: pokemonId,
-    name: pokemonName
-  });
+    while (currentEvolution) {
+      const speciesUrl = currentEvolution.species.url;
+      const pokemonId = speciesUrl.split("/").filter(Boolean).pop();
+      const pokemonName = currentEvolution.species.name;
 
-  currentEvolution = currentEvolution.evolves_to[0]; // Tiến hóa tiếp theo
+      listNumber.value.push({ id: pokemonId, name: pokemonName });
+      currentEvolution = currentEvolution.evolves_to[0];
+      listChain.value= listNumber.value;
+    }
+    console.log(listNumber.value);
+  } catch (error) {
+    console.error("Lỗi khi lấy chuỗi tiến hóa:", error);
+  }
 }
-}
-
-
-const listDesciption = ref([]);
-
+console.log("huh"+listNumber.value)
 async function getDescription() {
   try {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id.value}/`);
-    
     const data = await response.json();
-  
-    // Lọc ra các đoạn mô tả bằng tiếng Anh
-    const englishDescriptions = data.flavor_text_entries.filter(
-      entry => entry.language.name === "en"
-    );
-    // Lấy đoạn mô tả đầu tiên
-    listDesciption.value = englishDescriptions.map(entry => entry.flavor_text);
-    console.log(listDesciption.value[0])
+    const englishDescriptions = data.flavor_text_entries.filter(entry => entry.language.name === "en");
+    listDescription.value = englishDescriptions.map(entry => entry.flavor_text);
   } catch (error) {
-    console.error("Lỗi khi lấy mô tả:", error);
+    console.error("Lỗi khi lấy mô tả Pokémon:", error);
   }
 }
-function abbreviateStat(statName) {
-  const parts = statName.split('-');
-
-  if (parts.length === 2) {
-    return (
-      parts[0].substring(0, 2) + parts[1].slice(-1).toUpperCase()
-    );
-  }
-
-  if (parts.length > 2) {
-    return parts.map(part => part[0].toUpperCase()).join('');
-  }
-
-  return (
-    (statName.substring(0, 2) + statName[statName.length - 1]).toUpperCase()
-  );
-}
-
 
 onMounted(async () => {
-  await getAPI();
-  if (id.value) {
-    await getDescription();
-  }
-  await fetchEvolutionNumber();
-  await fetchEvolutionChain();
+  await getDataPokemon();
+  await setPokemonId();
 });
 </script>
+
 <template>
-    <div class="detailContainer">
-        <div class="popup">
-        <!-- <CardPokemon :poke="pokemonSelected" 
-        :getPokemonImage="getPokemonImage"
-        stateId="none"/> -->
-        <img :src="getPokemonImage(pokemonSelected.url)" alt="">
-        <div class="types" >
-                    <div  class="item_type" v-for="item in listType"
-                    :style="{backgroundColor: typeColors[item.type.name]}">{{ item.type.name }}</div>
+  <RouterLink to="/" class="backk">Back</RouterLink>
+  <div class="detailContainer">
+    <div class="popup">
+     <img :src="getPokemonImage(id)" alt="">
+      <div class="types">
 
-                </div>
-        <h1 class="name">{{ pokemonSelected.name }}</h1>
-        <div class="description">
-  {{ listDesciption && listDesciption.length > 0 ? listDesciption[0].replace(/\n|\f/g, ' ') : 'Đang tải mô tả...' }}
-</div>
-
-<div class="height_weight">
-
- <div> <h2>Height</h2><div> {{ renderSelected.height ? renderSelected.height : 'Loading height...' }}</div></div>
- <div> <h2>Weight</h2><div>{{ renderSelected.weight ? renderSelected.weight : 'Loading weight...' }}</div></div>
- 
-</div>
-<div >
-  <div ><h2>Abilities</h2></div>
-  <div  class="abilities"><div v-for="item in renderSelected.abilities" :key="item.ability.name">
-  {{ item.ability.name }}
-</div></div>
-  
-</div>
-
-
-<div ><h2>Stats</h2>
-    <div class="stats"><div v-for="item in renderSelected.stats">
-      <div>
-        <div>{{ abbreviateStat(item.stat.name) }}</div>
-        <div>{{ item.base_stat }}</div>
-
+        <div class="item_type" v-for="item in listType" :key="item.type.name" :style="{ backgroundColor: typeColors[item.type.name] }">
+          {{ item.type.name }}
+        </div>
       </div>
-    </div></div>
-  </div>
-  <div class="evolution">
-  <div class="imgEvolution" v-for="pokemon in listNumber" :key="pokemon.id">
-    <div><h2>{{ pokemon.name }}</h2></div>
-    <img :src="getPokemonImage(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}/`)" alt="Pokemon" />
-    
-  </div>
-</div>
-
+      <h1 class="name">{{ pokemonSelected?.name || 'Loading...' }}</h1>
+      <div class="description">
+        {{ listDescription.length > 0 ? listDescription[0].replace(/\n|\f/g, ' ') : 'Đang tải mô tả...' }}
+      </div>
+      <div class="height_weight">
+        <div>
+          <h2>Height</h2>
+          <div>{{ renderSelected?.height || 'Loading height...' }}</div>
+        </div>
+        <div>
+          <h2>Weight</h2>
+          <div>{{ renderSelected?.weight || 'Loading weight...' }}</div>
+        </div>
+      </div>
+      <div>
+        <h2>Abilities</h2>
+        <div class="abilities">
+          <div v-for="item in renderSelected?.abilities" :key="item.ability.name">
+            {{ item.ability.name }}
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>Stats</h2>
+        <div class="stats">
+          <div v-for="item in renderSelected?.stats" :key="item.stat.name">
+            <div>
+              <div>{{ item.stat.name }}</div>
+              <div>{{ item.base_stat }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="evolution">
+        <div class="imgEvolution" v-for="item in listNumber" :key="item.id">
+       
+          <div><h2>{{ item.name }}</h2></div>
+          <img :src="getPokemonImage(item.id)" alt="Pokemon" />
+        </div>
+      </div>
     </div>
-    </div>
+  </div>
 </template>
-<style scoped>
-h2{
-  font-weight:bold;
-  
-}
-.imgEvolution{
-  display: flex;
 
-}
-.imgEvolution > div{
-  padding-top: 40px;
-}
-.types{
+<style scoped>
+.types {
   display: flex;
   gap: 8px;
-  
-  
-
 }
-.item_type{
+.item_type {
   border-radius: 5px;
   padding-inline: 5px;
 }
-.popup{
+.popup {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
-.stats{
+.stats,.evolution, .abilities {
   display: flex;
   gap: 20px;
 }
-.evolution{
-  display: flex;
-  gap: 20px;
-}
-.abilities{
-  display: flex;
-  gap: 100px;
-}
-    .height_weight{
-      display: flex;
-      gap: 100px;
-    }
-    .detailContainer{
-        
-        margin-left: 0px;
-        max-width: 1280px;
-  margin: 0 auto; 
-   padding: 2rem;
-   margin-left: 500px;
-
+.detailContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 500px;
   
-    }
-  
-
-
-
+}
+.backk{
+  color: black;
+  margin-left: 20px;
+  border: 2px solid rgb(75, 72, 72);
+  border-radius: 10px;
+}
 </style>

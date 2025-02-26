@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { ref, onMounted, computed } from 'vue';
 import CardPokemon from './components/CardPokemon.vue'
 import ButtonPokemon from './components/ButtonPokemon.vue'
@@ -209,4 +209,7 @@ img{
    
 }
 
-</style>
+</style> -->
+<template>
+    <RouterView/>
+</template>

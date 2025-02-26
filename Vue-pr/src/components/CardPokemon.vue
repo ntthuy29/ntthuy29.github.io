@@ -1,5 +1,6 @@
 <script setup>
 import {ref,onMounted} from 'vue'
+import { RouterLink } from 'vue-router';
 let selected = ref(false);
 const emits = defineEmits(['poke','selected']);
 const typeColors = { 
@@ -45,23 +46,30 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="card" :id="poke.name" @click="selectedPokemon">
-                <div class="id" :style="{display: stateId}">#{{id}}</div>
-                <div class="img">
-                    <img :src="getPokemonImage(poke.url)" alt="Pokemon Image">
-                </div>
-                <div class="type" >
-                    <span  v-for="item in listType"
-                    :style="{backgroundColor: typeColors[item.type.name]}">{{ item.type.name }}</span>
+     <RouterLink :to="'/'+poke.name" class="pokeLink">
+        <div class="card" :id="poke.name">
+   
+   <div class="id" :style="{display: stateId}">#{{id}}</div>
+   <div class="img">
+       <img :src="getPokemonImage(poke.url)" alt="Pokemon Image">
+   </div>
+   <div class="type" >
+       <span  v-for="item in listType"
+       :style="{backgroundColor: typeColors[item.type.name]}">{{ item.type.name }}</span>
 
-                </div>
+   </div>
 
-                <div class="name">{{ poke.name }}</div>
+   <div class="name">{{ poke.name }}</div>
 
-            </div> 
-
+</div> 
+        </RouterLink>
+  
 </template>
 <style scoped>
+.pokeLink{
+    border-radius: 20px;
+    color:rgba(0, 0, 0);
+}
 .type{
     display: flex;
     gap: 5px;
