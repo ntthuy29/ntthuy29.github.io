@@ -96,7 +96,7 @@ async function fetchEvolutionChain() {
     console.error("Lỗi khi lấy chuỗi tiến hóa:", error);
   }
 }
-console.log("huh"+listNumber.value)
+// console.log("huh"+listNumber.value)
 async function getDescription() {
   try {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id.value}/`);
@@ -106,6 +106,27 @@ async function getDescription() {
   } catch (error) {
     console.error("Lỗi khi lấy mô tả Pokémon:", error);
   }
+}
+function text(name) {
+  const arr = name.split("-");
+
+  if (arr.length === 1) {
+    if (arr[0].length === 2) return arr[0];
+    if (arr[0][arr[0].length - 1] !== arr[0][1]) {
+      return arr[0].slice(0, 2) + arr[0][arr[0].length - 1];
+    }
+    return arr[0].slice(0, 3);
+  }
+
+  if (arr.length === 2) {
+    return arr[0].slice(0, 2) + arr[1][0];
+  }
+
+  if (arr.length > 3) {
+    return arr[0][0] + arr[1][0] + arr[2][0];
+  }
+
+  return "hihi";
 }
 
 onMounted(async () => {
@@ -152,7 +173,7 @@ onMounted(async () => {
         <div class="stats">
           <div v-for="item in renderSelected?.stats" :key="item.stat.name">
             <div>
-              <div>{{ item.stat.name }}</div>
+              <div>{{ text(item.stat.name) }}</div>
               <div>{{ item.base_stat }}</div>
             </div>
           </div>

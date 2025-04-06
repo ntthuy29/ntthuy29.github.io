@@ -1,9 +1,11 @@
-const express = require('express')
+// const express = require('express')
+import express from 'express'
 const app = express()
-const bodyParser = require('body-parser');
+import bodyParser from 'body-parser'
+import {getID,checkString, checkDataFromBody,checkDataForPut} from './api/middleware/getID.js'
 const port = 3000
 app.use(bodyParser.json());
-const fs = require('fs');
+import fs from 'fs'
 let users=[];
 try{
    const data=  fs.readFileSync('./users.json','utf8');
@@ -13,39 +15,34 @@ catch{
 
 }
 //lay ra thong tin nguoi dung
-app.get('/users',(rep,res)=>{
+app.get('/',(rep,res)=>{
     res.send(users);
+    res.status(200).send(users);
 })
-//lay ra thong tin nguoi dung theo thu tu giam gian
-app.get('/users/desc',(req,res)=>{
-    const order = req.query.order || 'asc';
+//lay ra thong tin nguoi dung theo thu tu
+app.get('/users/:default',checkString,(req,res)=>{
+    const order = req.params.default ;
     const sortedUsers = users.sort((a, b) => (order === 'desc' ? a.id - b.id : b.id - a.id));
     res.send(sortedUsers);
 }
 )
-//lay ra thong tin nguoi dung theo thu tu tang dan
-app.get('/users/asc',(req,res)=>{
-    const order = req.query.order || 'asc';
-    const sortedUsers = users.sort((a, b) => (order === 'asc' ? a.id - b.id : b.id - a.id));
-    res.send(sortedUsers);
+
+app.get('/:id',getID,(req,res)=>{
+    const user = users.find(user=>user.id=== parseInt(req.params.id ));
+    res.status(200).send(user);
 }
 )
-// lấy ra chi tiết người dùng
-app.get('/users/:id',(rep,res)=>{
-    const id = parseInt(rep.params.id);
-    const user = users.find(user=>user.id===id);
-    res.send(user);
-})
 //xóa người dùng
-app.delete('/users/:id',(rep,res)=>{
-    const id = parseInt(rep.params.id);
-    users = users.filter(user=>user.id!=id);
+app.delete('/users/:id',getID,(req,res)=>{
+    const id = parseInt(req.params.id);
+    users = users.filter(user=>user.id!= id);
     const data = JSON.stringify(users);
     fs.writeFileSync('./users.json',data,'utf8');
-    res.send(users)
+    
+    res.status(200).send(users);
 })
 // cập nhật người dùng
-app.put('/users/:id', (req, res) => {
+app.put('/users/:id',getID,checkDataForPut,(req, res) => {
     const userId = parseInt(req.params.id)
     const updatedUser = req.body
 
@@ -56,17 +53,18 @@ app.put('/users/:id', (req, res) => {
         fs.writeFileSync('./users.json',data,'utf8');
         res.json(users[index])
     } else {
-        res.status(404).json()
+        res.status(404).json().send("Lỗi")
     }
   
 });
 // thêm người dùng
-app.post('/users',(rep,res)=>{
-    const user = rep.body;
+app.post('/users',checkDataFromBody,(req,res)=>{
+    const user = req.body;
     users.push(user);
     const data = JSON.stringify(users);
     fs.writeFileSync('./users.json',data,'utf8');
     res.json(user);
+    res.status(401);
 })
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
