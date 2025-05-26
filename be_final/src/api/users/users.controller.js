@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt, { getSalt } from 'bcryptjs';
 
 import nodemailer from 'nodemailer';
-import User from '../../model/users.model'
+import User from '../../model/users.model';
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -63,7 +64,50 @@ try{
     }
 }
 export const getInforUser = async(req,res)=>{
+    try{
+        const { username, role, teamId} = req.user;
+        return res.status(200).json({
+            username: username,
+            role: role,
+            teamId : teamId,
+        })
+    }catch(error){
+        return res.status(400).json({
+            message: 'Lỗi khi lấy thông tin người dùng'
+        })
+    }
 
+
+}
+export const updateProfile = async (req, res)=>{
+    try{
+        const userId = req.user._id;
+        const userUpdate = req.body;
+        const user = await User.findByIdAndDelete(
+        userId,
+        {
+            $set: userUpdate,
+        },{
+            new: true,
+            runValidators: true,
+        }
+        );
+        if(!user){
+            return res.status(400).json({
+                message: 'Không tìm thấy người dùng'
+            });
+        }
+        else return res.status(200).json({
+            message: 'Update thành công',
+            user: userUpdate
+        })
+
+    }catch(error){
+return res.status(400).json({
+    message: 'Lỗi',
+})
+    }
+    
 
 
 }
