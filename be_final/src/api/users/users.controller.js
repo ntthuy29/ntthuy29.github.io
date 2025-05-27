@@ -3,14 +3,14 @@ import jwt from 'jsonwebtoken';
 import bcrypt, { getSalt } from 'bcryptjs';
 
 import nodemailer from 'nodemailer';
-import User from '../../model/users.model';
+import User from '../../model/users.model.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
 
 export const registerUser = async(req, res)=>{
     try{
-        const {username, passeword,role,teamId} = req.body;
+        const {username, password,role,teamId} = req.body;
     const userExit = await User.findOne({username});
     if(userExit){
         return res.status(400).json({message: 'Username đã tồn tại'});
@@ -42,8 +42,7 @@ try{
         if(isMatch){
             const token = jwt.sign({
                 id: exitUser._id,
-                username: exitUser.username,
-                role: exitUser.role,
+               
 
             },process.env.JWT_SECRET,{
                 expiresIn: '2h',
@@ -65,11 +64,17 @@ try{
 }
 export const getInforUser = async(req,res)=>{
     try{
-        const { username, role, teamId} = req.user;
+        const { id} = req.user;
+        const user = await User.findById(id).select('username role teamId');
         return res.status(200).json({
-            username: username,
-            role: role,
-            teamId : teamId,
+            success: true,
+            message: 'Lấy thông tin người dùng thành công',
+            user: {
+                username: user.username,
+                role: user.role,
+                teamId: user.teamId
+            }
+            
         })
     }catch(error){
         return res.status(400).json({
@@ -81,9 +86,10 @@ export const getInforUser = async(req,res)=>{
 }
 export const updateProfile = async (req, res)=>{
     try{
-        const userId = req.user._id;
+        const userId = req.user.id;
+      
         const userUpdate = req.body;
-        const user = await User.findByIdAndDelete(
+        const user = await User.findByIdAndUpdate(
         userId,
         {
             $set: userUpdate,

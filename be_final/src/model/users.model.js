@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 const userSchema = new mongoose.Schema(
     {
-        usename: {
+        username: {
             type: String,
             required: true,
         },
@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
         teamId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Team',
+            required: false,
         }
 
     }

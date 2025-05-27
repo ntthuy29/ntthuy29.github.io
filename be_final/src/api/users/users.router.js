@@ -4,6 +4,7 @@ import { authToken } from '../../middlewares/users.middlewares.js';
 const userRoute = express.Router();
 userRoute.post('/register', registerUser);
 userRoute.post('/login', loginUser);
-userRoute.post('/me',authToken,getInforUser);
+userRoute.get('/me',authToken,getInforUser);
 userRoute.patch('/me',authToken,updateProfile);
+
 export default userRoute;
