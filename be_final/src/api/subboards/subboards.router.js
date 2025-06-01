@@ -1,9 +1,11 @@
 import express from 'express';
+import upload from '../../service/Cloudinary/upload.js';
 import { isAdmin } from '../../middlewares/admin.middlewares.js';
 const subboardRoute = express.Router({ mergeParams: true });
 subboardRoute.use(express.json());
-import {addBoard, updateSubBoard, deleteSubBoard} from './subboard.controller.js';
+import {addBoard, updateSubBoard, deleteSubBoard, uploadFileImg} from './subboard.controller.js';
 subboardRoute.post("/",isAdmin, addBoard);
 subboardRoute.patch("/:idSB", isAdmin, updateSubBoard);
 subboardRoute.delete("/:idSB", isAdmin, deleteSubBoard);
+subboardRoute.post("/:idSB/upload", isAdmin, upload.single('background'), uploadFileImg);
 export default subboardRoute;

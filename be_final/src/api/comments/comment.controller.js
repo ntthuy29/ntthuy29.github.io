@@ -45,3 +45,33 @@ export const createComment = async(req, res)=>{
     }
 
 }
+
+export const getCommentonTask = async(req, res)=>{
+
+    const {taskId} = req.params;
+    if (!taskId) {
+        return res.status(400).json({
+            success: false,
+            message: 'ID task là bắt buộc'
+        });
+    }
+    try{
+        const task = await Task.findById(taskId).populate('comments');
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy task'
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            data: task.comments
+        });
+    }catch(error){
+        console.log(error);
+        return res.status(400).json({
+            success: false,
+            message: 'Lỗi khi lấy bình luận'
+        });
+    }
+}

@@ -48,6 +48,7 @@ await task.save();
 export const updateSubBoard = async(req, res) => {
   try {
     const { idSB } = req.params;
+    console.log(idSB);
     const updateSubBoard = req.body;
 
     if (!idSB) {
@@ -132,6 +133,28 @@ export const deleteSubBoard = async(req, res)=>{
         });
     }
 }
-export const uploadFileImg = async (req, res) => {    
+export const uploadFileImg = async (req, res) => {
+  try {
+    const { id } = req.params;
+console.log(id);
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ success: false, message: 'Không có ảnh được upload' });
+    }
 
-}
+    const imageUrl = req.file.path;
+
+    const updated = await SubBoard.findByIdAndUpdate(
+      id,
+      { backgroundImage: imageUrl },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ success: false, message: 'Không tìm thấy SubBoard' });
+    }
+
+    res.status(200).json({ success: true, data: updated });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });
+  }
+};
