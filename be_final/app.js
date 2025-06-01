@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import connectDB from'./src/database/database.connection.js'
 import taskRoute from "./src/api/tasks/tasks.router.js";
 import subboardRoute from "./src/api/subboards/subboards.router.js";
+import teamRoute from "./src/api/teams/team.router.js";
 const app = express();
 app.use(express.json()); 
 const PORT =3000;
@@ -16,7 +17,7 @@ app.get("/",(req,res)=>{
 app.use('/api/users',userRoute);
 app.use('/api/tasks',authToken,taskRoute);
 app.use('/api/subboards', authToken, subboardRoute);
-
+app.use('/api/teams', authToken, teamRoute);
 app.listen(PORT, () => {
   console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
 });
