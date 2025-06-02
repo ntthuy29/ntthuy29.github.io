@@ -135,7 +135,7 @@ export const deleteTask = async (req,res)=>{
         });
     }
     try{
-        const task = awaitTak.findByIdAndUpdate(id);
+        const task = await Task.findByIdAndUpdate(id);
         if(!task){
             return res.status(400).json({
                 success: false,
@@ -153,5 +153,47 @@ console.log(error);
             success: false,
             message: 'Lỗi khi xóa task'
         })
+    }
+}
+export const addTasktoTeam = async (req, res)=>{
+    const {teamId } = req.body;
+    const {taskId}= req.params;
+    if (!teamId || !taskId) {
+        return res.status(400).json({
+            success: false,
+            message: 'ID nhóm và ID task là bắt buộc'
+        });
+    }
+    try{
+        const task = await Task.findByIdAndUpdate(
+            taskId,
+            {
+                $set: { teamId: teamId }
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy task'
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: 'Thêm task vào nhóm thành công',
+            data: task
+        });
+
+    
+
+}catch(error){
+        console.log(error);
+        return res.status(400).json({
+            success: false,
+            message: 'Lỗi khi thêm task vào nhóm'
+        });
     }
 }

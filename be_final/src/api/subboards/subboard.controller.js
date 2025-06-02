@@ -20,7 +20,7 @@ export const addBoard = async(req, res) => {
 const task = await Task.findByIdAndUpdate(
     taskId,
     {
-        $push: { subBoards: newBoard._id } // chỉ push _id
+        $push: { subBoards: newBoard._id } 
     },
     {
         new: true,

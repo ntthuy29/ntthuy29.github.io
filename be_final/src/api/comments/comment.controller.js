@@ -1,4 +1,4 @@
-import Commment from '../../model/comment.model.js';
+import Comment from '../../model/comment.model.js';
 import Task from '../../model/task.model.js';
 
 
@@ -12,7 +12,7 @@ export const createComment = async(req, res)=>{
             });
         }
     try{
-        const newComment = new Commment({
+        const newComment = new Comment({
             content: content, 
             taskId: taskId, 
             userId: req.user.id,
@@ -65,7 +65,7 @@ export const getCommentonTask = async(req, res)=>{
         }
         return res.status(200).json({
             success: true,
-            data: task.comments
+            data: task
         });
     }catch(error){
         console.log(error);

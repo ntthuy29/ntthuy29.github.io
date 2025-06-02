@@ -4,6 +4,7 @@ import bcrypt, { getSalt } from 'bcryptjs';
 import Team from '../../model/team.model.js';
 import nodemailer from 'nodemailer';
 import User from '../../model/users.model.js';
+import Task from '../../model/task.model.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -184,3 +185,114 @@ export const deleteUser = async (req, res)=>{
         });
     }
 }
+export const getTaskofUser = async (req, res) =>{
+    const userId = req.user.id;
+    try {
+        const user = await User.findById(userId).populate('teamId');
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy người dùng'
+            });
+        }
+        const team = user.teamId;
+        if (!team) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy nhóm của người dùng'
+            });
+        }
+        const tasks = await Task.find({
+            teamId: team._id
+        }).populate('subBoards');
+        if (tasks.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không có nhiệm vụ nào trong nhóm cua nguoi dung này'
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: 'Lấy nhiệm vụ của người dùng thành công',
+            tasks: tasks.map(task => ({
+                id: task._id,
+                title: task.title,
+                description: task.description,
+                status: task.status,
+                subBoards: task.subBoards.map(subBoard => ({
+                    id: subBoard._id,
+                    name: subBoard.name
+                }))
+            }))
+        });
+
+
+    }catch(error){
+        console.log(error);
+        return res.status(400).json({
+            success: false,
+            message: 'Lỗi khi lấy nhiệm vụ của người dùng'
+        });
+    }
+}
+export const updateStatusTask = async (req, res) => {
+    const updateData = req.body;
+    const { subboardId } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+        return res.status(401).json({
+            success: false,
+            message: 'Chưa xác thực người dùng'
+        });
+    }
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy người dùng' });
+        }
+
+        const teamId = user.teamId;
+        if (!teamId) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy nhóm của người dùng' });
+        }
+
+        const tasks = await Task.find({ teamId }).populate('subBoards');
+        if (!tasks.length) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy nhiệm vụ' });
+        }
+
+        // Tìm task chứa subBoard cần cập nhật
+        const taskWithSub = tasks.find(t => t.subBoards.some(sb => sb._id.toString() === subboardId));
+        if (!taskWithSub) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy bảng con' });
+        }
+
+        const subBoardToUpdate = taskWithSub.subBoards.find(sb => sb._id.toString() === subboardId);
+        subBoardToUpdate.name = updateData.name || subBoardToUpdate.name;
+        await subBoardToUpdate.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Cập nhật trạng thái nhiệm vụ thành công',
+            data: tasks.map(task => ({
+                id: task._id,
+                title: task.title,
+                description: task.description,
+                status: task.status,
+                subBoards: task.subBoards.map(sb => ({
+                    id: sb._id,
+                    name: sb.name
+                }))
+            }))
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            success: false,
+            message: 'Lỗi khi cập nhật trạng thái nhiệm vụ'
+        });
+    }
+};

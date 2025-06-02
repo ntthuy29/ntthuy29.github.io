@@ -16,7 +16,7 @@ app.get("/",(req,res)=>{
 });
 app.use('/api/users',userRoute);
 app.use('/api/tasks',authToken,taskRoute);
-app.use('/api/subboards', authToken, subboardRoute);
+app.use('/api', authToken, subboardRoute);
 app.use('/api/teams', authToken, teamRoute);
 app.listen(PORT, () => {
   console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);

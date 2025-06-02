@@ -83,8 +83,7 @@ export const addUser= async(req, res) => {
        
       
         
-        team.members.push(...userIds);
-        await team.save();
+       
         
       
         for (const userId of userIds) {
@@ -292,5 +291,4 @@ export const updateTeam = async(req, res) => {
         });
     }
 }
-
 
