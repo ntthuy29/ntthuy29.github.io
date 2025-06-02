@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken';
 import bcrypt, { getSalt } from 'bcryptjs';
-
+import Team from '../../model/team.model.js';
 import nodemailer from 'nodemailer';
 import User from '../../model/users.model.js';
 
@@ -25,10 +25,15 @@ export const registerUser = async(req, res)=>{
         teamId: teamId,
     });
     await newUser.save();
-    return res.status(201).json({message: "Đăng ký thành công"})
+    return res.status(201).json({
+        success: true,
+        message: "Đăng ký thành công",
+        data: newUser})
     }catch(error){
         console.log(error);
-        return res.status(400).json({message: 'Đăng ký thất bại'});
+        return res.status(400).json({
+            success: false,
+            message: 'Đăng ký thất bại'});
     }
 }
 
@@ -47,7 +52,9 @@ try{
             },process.env.JWT_SECRET,{
                 expiresIn: '2h',
             });
-            return res.status(200).json({message: 'Đăng nhập thành công',
+            return res.status(200).json({
+                success: true,
+                message: 'Đăng nhập thành công',
                 token: token,
             });
     } else {
@@ -59,7 +66,10 @@ try{
 }
     }catch(error){
         console.log(error);
-        return res.status(400).json({message: 'Đăng nhập thất bại'});
+        return res.status(400).json({
+            success: false,
+            
+            message: 'Đăng nhập thất bại'});
     }
 }
 export const getInforUser = async(req,res)=>{
@@ -116,4 +126,61 @@ return res.status(400).json({
     
 
 
+}
+export const getAllUser = async (req, res)=>{
+    try{
+        const users = await User.find();
+        if(users.length === 0){
+            return res.status(404).json({
+                message: 'Không có người dùng nào'
+            });
+        }
+        return res.status(200).json({
+            message: 'Lấy tất cả người dùng thành công',
+            users: users.map(user => ({
+                id: user._id,
+                username: user.username,
+                role: user.role,
+                teamId: user.teamId
+            }))
+        });
+    }catch(error){
+        console.log(error);
+        return res.status(400).json({
+            message: 'Lỗi khi lấy tất cả người dùng'
+        });
+    }
+}
+export const deleteUser = async (req, res)=>{
+    try{
+        const { id } = req.params;
+        if(!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(400).json({
+                message: 'ID không hợp lệ'
+            });
+        }
+        const team = await Team.findOne({ members: id });
+        team.members = team.members.filter(member => member.toString() !== id);
+        await team.save();
+        const user = await User.findByIdAndDelete(id);
+        if(!user){
+            return res.status(404).json({
+                message: 'Không tìm thấy người dùng'
+            });
+        }
+        return res.status(200).json({
+            message: 'Xóa người dùng thành công',
+            user: {
+                id: user._id,
+                username: user.username,
+                role: user.role,
+                teamId: user.teamId
+            }
+        });
+    }catch(error){
+        console.log(error);
+        return res.status(400).json({
+            message: 'Lỗi khi xóa người dùng'
+        });
+    }
 }

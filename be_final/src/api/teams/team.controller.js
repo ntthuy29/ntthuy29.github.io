@@ -1,5 +1,5 @@
 import Team from "../../model/team.model.js";
-import User from "../../model/user.model.js";
+import User from "../../model/users.model.js";
 export const createTeam = async(req, res) => {
     const { name, description } = req.body;
     
@@ -33,14 +33,19 @@ export const createTeam = async(req, res) => {
     }
 }
 export const addUser= async(req, res) => {
-    const {id} = req.body;
+ 
+   const userIds = Array.isArray(req.body.userIds)
+  ? req.body.userIds
+  : [req.body.userId];
     const { teamId } = req.params;
-    if (!id || !teamId) {
+    
+    if (!teamId || userIds.length === 0) {
         return res.status(400).json({
             success: false,
-            message: 'ID người dùng và ID nhóm là bắt buộc'
+            message: 'ID nhóm và ID người dùng là bắt buộc'
         });
     }
+    
     try {
         const team = await Team.findById(teamId);
         if (!team) {
@@ -49,39 +54,65 @@ export const addUser= async(req, res) => {
                 message: 'Không tìm thấy nhóm'
             });
         }
-        if (team.members.includes(id)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Người dùng đã là thành viên của nhóm'
-            });
+        
+        for (const userId of userIds) {
+            const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: `Không tìm thấy người dùng với ID ${userId}`
+                });
+            }
+         
+            if (user.teamId) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Người dùng với ID ${userId} đã là thành viên của một nhóm khác`
+                });
+            }
+         
+            if (team.members.includes(userId)) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Người dùng với ID ${userId} đã là thành viên của nhóm này`
+                });
+            }
+
         }
-        team.members.push(id);
-        await team.save();  
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'Không tìm thấy người dùng'
-            });
+        
+       
+      
+        
+        team.members.push(...userIds);
+        await team.save();
+        
+      
+        for (const userId of userIds) {
+            const user = await User.findById(userId);
+            if (user) {
+                user.teamId = teamId; 
+                await user.save();
+            }
+
         }
-        user.teamId = teamId;
-        await user.save();
+         team.members.push(...userIds);
+        await team.save();
+        
         return res.status(200).json({
             success: true,
             message: 'Thêm người dùng vào nhóm thành công',
             data: team
         });
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi khi thêm người dùng vào nhóm',
+            error: error.message
+        });
+    }
 
-}
-
-catch (error) {
-    console.error(error);
-    return res.status(500).json({
-        success: false,
-        message: 'Lỗi khi thêm người dùng vào nhóm',
-        error: error.message
-    }); 
-}
 }
 export const removeUser = async(req, res) => { 
     const {id} = req.body;
