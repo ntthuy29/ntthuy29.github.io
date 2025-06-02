@@ -9,6 +9,6 @@ taskRoute.get('/',getTask);
 taskRoute.get('/:id',getTaskById);
 taskRoute.patch('/:id',isAdmin,updateTask);
 taskRoute.delete('/:id',isAdmin,deleteTask);
-taskRoute.use('/:taskId/subboards', subboardRoute);
+// taskRoute.use('/:taskId/subboards', subboardRoute);
 taskRoute.use('/:taskId/comments', commentRoute);
 export default taskRoute;

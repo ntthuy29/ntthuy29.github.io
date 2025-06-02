@@ -47,7 +47,7 @@ await task.save();
 
 export const updateSubBoard = async(req, res) => {
   try {
-    const { idSB } = req.params;
+   const { idSB } = req.params;
     console.log(idSB);
     const updateSubBoard = req.body;
 
@@ -108,7 +108,7 @@ export const deleteSubBoard = async(req, res)=>{
         const task = await Task.findOneAndUpdate(
             subBoard.taskId,
             {
-                //toi muon xoa bang nay khoi task
+                
                 $pull: { subBoards: idSB } // xoa bang khoi task
             }
             ,
@@ -135,8 +135,8 @@ export const deleteSubBoard = async(req, res)=>{
 }
 export const uploadFileImg = async (req, res) => {
   try {
-    const { id } = req.params;
-console.log(id);
+    const { idSB } = req.params;
+console.log(idSB);
     if (!req.file || !req.file.path) {
       return res.status(400).json({ success: false, message: 'Không có ảnh được upload' });
     }
@@ -144,8 +144,8 @@ console.log(id);
     const imageUrl = req.file.path;
 
     const updated = await SubBoard.findByIdAndUpdate(
-      id,
-      { backgroundImage: imageUrl },
+      idSB,
+      { background: imageUrl },
       { new: true }
     );
 
