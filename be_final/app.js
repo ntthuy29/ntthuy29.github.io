@@ -18,6 +18,6 @@ app.use('/api/users',userRoute);
 app.use('/api/tasks',authToken,taskRoute);
 app.use('/api', authToken, subboardRoute);
 app.use('/api/teams', authToken, teamRoute);
-app.listen(PORT, () => {
-  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server đang chạy tại http://0.0.0.0:${PORT}`);
 });

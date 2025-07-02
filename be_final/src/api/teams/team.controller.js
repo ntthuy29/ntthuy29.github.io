@@ -79,20 +79,12 @@ export const addUser= async(req, res) => {
             }
 
         }
-        
-       
-      
-        
-       
-        
-      
         for (const userId of userIds) {
             const user = await User.findById(userId);
             if (user) {
                 user.teamId = teamId; 
                 await user.save();
             }
-
         }
          team.members.push(...userIds);
         await team.save();
@@ -111,7 +103,6 @@ export const addUser= async(req, res) => {
             error: error.message
         });
     }
-
 }
 export const removeUser = async(req, res) => { 
     const {id} = req.body;
@@ -162,8 +153,6 @@ export const removeUser = async(req, res) => {
         });
     }
 }
-
-
 export const deleteTeam = async(req, res) => {
     const { id } = req.params;
     
