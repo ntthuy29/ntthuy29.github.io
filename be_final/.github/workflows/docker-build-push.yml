@@ -6,7 +6,7 @@ on:
       - gh-pages
   pull_request:
     branches:
-      - gp-pages
+      - gh-pages
 # Chuỗi các task sẽ thực hiện khi lắng nghe các sự kiện
 jobs:
   job_1:
