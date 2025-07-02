@@ -17,7 +17,7 @@ jobs:
     steps:
       # Pull code trên git reposity về máy ảo Ubuntu chạy job này
       - name: Checkout code and pull from git reposity
-        uses: actions/checkout@main
+        uses: actions/checkout@v3
       # Login vào Docker Hub
       - name: Login Docker Hub
         uses: docker/login-action@master
